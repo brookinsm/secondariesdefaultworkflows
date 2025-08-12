@@ -25,7 +25,7 @@ test('test', async ({ page }) => {
  await page.getByPlaceholder('Quantity of labels').fill('1');
  await page.getByPlaceholder('Quantity of labels').press('Enter');
  await page.getByRole('link', { name: 'List' }).click();
- await page.getByRole('cell', { name: '\\\\PRINT-SERV\\Lexmark-room' }).click();
+ await page.getByRole('cell', { name: 'TestPrinter1' }).click();
  await page.getByRole('link', { name: 'Exit' }).click();
  await page.getByRole('link', { name: 'Exit' }).click();
 });
