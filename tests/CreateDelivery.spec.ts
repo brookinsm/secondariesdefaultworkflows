@@ -2,12 +2,22 @@ import { test, expect } from '@playwright/test';
 import { loginToApplication } from '../pages/login';
 
 test('test', async ({ page }) => {
-  // Use the login helper instead of manual login steps
+  // call loginToApplication page
   await loginToApplication(page);
 
   // Navigate to create delivery
-  await page.getByRole('link', { name: 'QA Regression' }).click();
-  await page.getByRole('link', { name: 'Create Delivery' }).click();
+  // await page.getByRole('link', { name: 'QA Regression' }).click();
+  // First validate the QA Regression link exists and is visible
+const qaRegressionLink = page.getByRole('link', { name: 'QA Regression' });
+await expect(qaRegressionLink).toBeVisible();
+await qaRegressionLink.click();
+
+  // await page.getByRole('link', { name: 'Create Delivery' }).click();
+  // First validate the QA Regression link exists and is visible
+const createDeliveryLink = page.getByRole('link', { name: 'Create Delivery' });
+await expect(createDeliveryLink).toBeVisible();
+await createDeliveryLink.click();
+
   await page.getByPlaceholder('Organization Code').click();
   await page.getByPlaceholder('Organization Code').fill('001');
   await page.getByPlaceholder('Organization Code').press('Enter');
