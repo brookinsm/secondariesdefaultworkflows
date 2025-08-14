@@ -1,50 +1,36 @@
-import { expect } from "@playwright/test";
-
-export class LoginPage {
-  constructor(page) {
-    this.page = page;
-  }
+/**
+ * Login function that tries Auth Server login first, then falls back to legacy login
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ */
+export async function loginToApplication(page) {
+  await page.goto('https://icsus-qa01.oraclecloud.rfsmart.com:8443/webclient/');
   
-  loginBtn = () => this.page.locator(".btn-primary");
-  usernameInput = () => this.page.locator("#Username");
-  passwordInput = () => this.page.locator("#Password");
-  cancelBtn = () => this.page.locator(".btn-secondary")
-
-  //Login
-  async goto() {
-    await this.page.goto("https://icsus-qa01.oraclecloud.rfsmart.com:8443/webclient/");
+  // Try Auth Server login first
+  try {
+    // Check if username field for Auth Server login exists with a timeout
+    const authUsernameField = await page.waitForSelector('input[placeholder="Username"]', { timeout: 5000 });
+    
+    if (authUsernameField) {
+      console.log("Using Auth Server login...");
+      await page.getByPlaceholder('Username').click();
+      await page.getByPlaceholder('Username').fill('dev.one');
+      await page.getByRole('button', {name: 'Login'}).click();
+      return true;
+    }
+  } catch (error) {
+    // If Auth Server login elements aren't found, try legacy login
+    console.log("Auth Server login not available, trying legacy login...");
+    try {
+      await page.getByPlaceholder('User ID').click();
+      await page.getByPlaceholder('User ID').fill('dev.one');
+      await page.getByPlaceholder('Password').click();
+      await page.getByPlaceholder('Password').fill('smartICS1982');
+      await page.getByRole('link', { name: 'Enter' }).click();
+      return true;
+    } catch (legacyError) {
+      console.error("Legacy login failed:", legacyError);
+      throw new Error("Both login methods failed");
+    }
   }
-
-//Enter valid login credentials
-  async inputValidLoginCredentials() {
-    await this.usernameInput().fill("dev.one");
-    await this.passwordInput().fill("RFSics1650");
-  }
-
-  //Enter invalid login credentials
-  async inputInvalidLoginCredentials() {
-    await this.usernameInput().fill("invalid_user");
-    await this.passwordInput().fill("invalidPassword");
-  }
-
-  //Login button
-  async submitLoginCredentials() {
-    await this.loginBtn().click();
-  }
-
-  //Cancel button
-  async cancelLoginCredentials() {
-    await this.cancelBtn().click();
-  }
-
-  //Validate error message returned
-  async validateInvalidLoginErrorMsg() {
-    await expect(this.loginErrorMsg()).toBeVisible();
-    await expect(this.loginErrorMsg()).toHaveText(
-      "Invalid username or password"
-    );
-  }
-
+  return false;
 }
-
-

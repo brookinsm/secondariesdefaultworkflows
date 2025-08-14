@@ -1,18 +1,11 @@
 import { test, expect } from '@playwright/test';
+import { loginToApplication } from '../pages/login';
 
 test('test', async ({ page }) => {
-  await page.goto ('https://icsus-qa01.oraclecloud.rfsmart.com:8443/webclient/');
-/* Enable for Auth Server disable for legacy login*/
-  // await page.getByPlaceholder('Username').click();
-  // await page.getByPlaceholder('Username').fill('dev.one');
-  // await page.getByRole('button', {name: 'Login'}).click();
-/* Enable for legacy disable for auth server login*/
-  await page.getByPlaceholder('User ID').click();
-  await page.getByPlaceholder('User ID').fill('dev.one');
-  await page.getByPlaceholder('Password').click();
-  await page.getByPlaceholder('Password').fill('smartICS1982');
+  // Use the login helper instead of manual login steps
+  await loginToApplication(page);
 
-  await page.getByRole('link', { name: 'Enter' }).click();
+  // Navigate to create delivery
   await page.getByRole('link', { name: 'QA Regression' }).click();
   await page.getByRole('link', { name: 'Create Delivery' }).click();
   await page.getByPlaceholder('Organization Code').click();
@@ -20,80 +13,19 @@ test('test', async ({ page }) => {
   await page.getByPlaceholder('Organization Code').press('Enter');
   await page.getByRole('link', { name: 'Skip Photo' }).click();
   await page.getByPlaceholder('Delivery Recipient').click();
-  await page.getByPlaceholder('Delivery Recipient').fill('AUTO');
+  await page.getByPlaceholder('Delivery Recipient').fill('DR_AUTO');
   await page.getByPlaceholder('Delivery Recipient').press('Enter');
   await page.getByPlaceholder('Deliver To Location').click();
-  await page.getByPlaceholder('Deliver To Location').fill('JAXAUTO');
+  await page.getByPlaceholder('Deliver To Location').fill('DTL_AUTO');
   await page.getByPlaceholder('Deliver To Location').press('Enter');
   await page.getByPlaceholder('Notes').click();
-  await page.getByPlaceholder('Notes').fill('AUTONOTES');
+  await page.getByPlaceholder('Notes').fill('NOTES_AUTO');
   await page.getByPlaceholder('Notes').press('Enter');
   await page.getByPlaceholder('Number of Pieces').click();
   await page.getByPlaceholder('Number of Pieces').fill('1');
   await page.getByPlaceholder('Number of Pieces').press('Enter');
   await page.getByRole('link', { name: 'List' }).click();
   await page.getByRole('cell', { name: 'TestPrinter1' }).click();
-  //Add multiple deliveries (uncomment lines below)
-//   await page.getByRole('link', { name: 'Skip Photo' }).click();
-//   await page.getByPlaceholder('Delivery Recipient').click();
-//   await page.getByPlaceholder('Delivery Recipient').fill('AUTO');
-//   await page.getByPlaceholder('Delivery Recipient').press('Enter');
-//   await page.getByPlaceholder('Deliver To Location').click();
-//   await page.getByPlaceholder('Deliver To Location').fill('JAXAUTO');
-//   await page.getByPlaceholder('Deliver To Location').press('Enter');
-//   await page.getByPlaceholder('Notes').click();
-//   await page.getByPlaceholder('Notes').fill('AUTONOTES');
-//   await page.getByPlaceholder('Notes').press('Enter');
-//   await page.getByPlaceholder('Number of Pieces').click();
-//   await page.getByPlaceholder('Number of Pieces').fill('1');
-//   await page.getByPlaceholder('Number of Pieces').press('Enter');
-//   await page.getByRole('link', { name: 'List' }).click();
-//   await page.getByRole('cell', { name: '\\\\PRINT-SERV\\Lexmark-room' }).click();
-//   await page.getByRole('link', { name: 'Skip Photo' }).click();
-//   await page.getByPlaceholder('Delivery Recipient').click();
-//   await page.getByPlaceholder('Delivery Recipient').fill('AUTO');
-//   await page.getByPlaceholder('Delivery Recipient').press('Enter');
-//   await page.getByPlaceholder('Deliver To Location').click();
-//   await page.getByPlaceholder('Deliver To Location').fill('JAXAUTO');
-//   await page.getByPlaceholder('Deliver To Location').press('Enter');
-//   await page.getByPlaceholder('Notes').click();
-//   await page.getByPlaceholder('Notes').fill('AUTONOTES');
-//   await page.getByPlaceholder('Notes').press('Enter');
-//   await page.getByPlaceholder('Number of Pieces').click();
-//   await page.getByPlaceholder('Number of Pieces').fill('1');
-//   await page.getByPlaceholder('Number of Pieces').press('Enter');
-//   await page.getByRole('link', { name: 'List' }).click();
-//   await page.getByRole('cell', { name: '\\\\PRINT-SERV\\Lexmark-room' }).click();
-//   await page.getByRole('link', { name: 'Skip Photo' }).click();
-//   await page.getByPlaceholder('Delivery Recipient').click();
-//   await page.getByPlaceholder('Delivery Recipient').fill('AUTO');
-//   await page.getByPlaceholder('Delivery Recipient').press('Enter');
-//   await page.getByPlaceholder('Deliver To Location').click();
-//   await page.getByPlaceholder('Deliver To Location').fill('JAXAUTO');
-//   await page.getByPlaceholder('Deliver To Location').press('Enter');
-//   await page.getByPlaceholder('Notes').click();
-//   await page.getByPlaceholder('Notes').fill('AUTONOTES');
-//   await page.getByPlaceholder('Notes').press('Enter');
-//   await page.getByPlaceholder('Number of Pieces').click();
-//   await page.getByPlaceholder('Number of Pieces').fill('1');
-//   await page.getByPlaceholder('Number of Pieces').press('Enter');
-//   await page.getByRole('link', { name: 'List' }).click();
-//   await page.getByRole('cell', { name: '\\\\PRINT-SERV\\Lexmark-room' }).click();
-//   await page.getByRole('link', { name: 'Skip Photo' }).click();
-//   await page.getByPlaceholder('Delivery Recipient').click();
-//   await page.getByPlaceholder('Delivery Recipient').fill('AUTO');
-//   await page.getByPlaceholder('Delivery Recipient').press('Enter');
-//   await page.getByPlaceholder('Deliver To Location').click();
-//   await page.getByPlaceholder('Deliver To Location').fill('JAXAUTO');
-//   await page.getByPlaceholder('Deliver To Location').press('Enter');
-//   await page.getByPlaceholder('Notes').click();
-//   await page.getByPlaceholder('Notes').fill('AUTONOTES');
-//   await page.getByPlaceholder('Notes').press('Enter');
-//   await page.getByPlaceholder('Number of Pieces').click();
-//   await page.getByPlaceholder('Number of Pieces').fill('1');
-//   await page.getByPlaceholder('Number of Pieces').press('Enter');
-//   await page.getByRole('link', { name: 'List' }).click();
-//   await page.getByRole('cell', { name: 'TestPrinter1' }).click();
-await page.getByRole('link', { name: 'Exit' }).click();
-await page.getByRole('link', { name: 'Exit' }).click();
+  await page.getByRole('link', { name: 'Exit' }).click();
+  await page.getByRole('link', { name: 'Exit' }).click();
 });
