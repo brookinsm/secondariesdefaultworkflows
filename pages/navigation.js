@@ -1,3 +1,6 @@
+// Add this import at the top of navigation.js
+const { expect } = require('@playwright/test');
+
 class Navigation {
   constructor(page) {
     this.page = page;

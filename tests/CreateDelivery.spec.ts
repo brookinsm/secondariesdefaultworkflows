@@ -1,41 +1,39 @@
 import { test, expect } from '@playwright/test';
 import { loginToApplication } from '../pages/login';
+import { Navigation } from '../pages/navigation';
+import { QaRegressionPage } from '../pages/qaRegressionPage';
+import { CreateDeliveryPage } from '../pages/createDeliveryPage';
+import { PrinterSelectionPage } from '../pages/printerSelectionPage';
+import { deliveryData } from '../fixtures/testData';
 
-test('test', async ({ page }) => {
-  // call loginToApplication page
+test('Create a new delivery', async ({ page }) => {
+  // Login to application
   await loginToApplication(page);
-
+  
+  // Initialize page objects
+  const navigation = new Navigation(page);
+  const qaRegressionPage = new QaRegressionPage(page);
+  const createDeliveryPage = new CreateDeliveryPage(page);
+  const printerSelectionPage = new PrinterSelectionPage(page);
+  
   // Navigate to create delivery
-  // await page.getByRole('link', { name: 'QA Regression' }).click();
-  // First validate the QA Regression link exists and is visible
-const qaRegressionLink = page.getByRole('link', { name: 'QA Regression' });
-await expect(qaRegressionLink).toBeVisible();
-await qaRegressionLink.click();
-
-  // await page.getByRole('link', { name: 'Create Delivery' }).click();
-  // First validate the QA Regression link exists and is visible
-const createDeliveryLink = page.getByRole('link', { name: 'Create Delivery' });
-await expect(createDeliveryLink).toBeVisible();
-await createDeliveryLink.click();
-
-  await page.getByPlaceholder('Organization Code').click();
-  await page.getByPlaceholder('Organization Code').fill('001');
-  await page.getByPlaceholder('Organization Code').press('Enter');
-  await page.getByRole('link', { name: 'Skip Photo' }).click();
-  await page.getByPlaceholder('Delivery Recipient').click();
-  await page.getByPlaceholder('Delivery Recipient').fill('DR_AUTO');
-  await page.getByPlaceholder('Delivery Recipient').press('Enter');
-  await page.getByPlaceholder('Deliver To Location').click();
-  await page.getByPlaceholder('Deliver To Location').fill('DTL_AUTO');
-  await page.getByPlaceholder('Deliver To Location').press('Enter');
-  await page.getByPlaceholder('Notes').click();
-  await page.getByPlaceholder('Notes').fill('NOTES_AUTO');
-  await page.getByPlaceholder('Notes').press('Enter');
-  await page.getByPlaceholder('Number of Pieces').click();
-  await page.getByPlaceholder('Number of Pieces').fill('1');
-  await page.getByPlaceholder('Number of Pieces').press('Enter');
-  await page.getByRole('link', { name: 'List' }).click();
-  await page.getByRole('cell', { name: 'TestPrinter1' }).click();
-  await page.getByRole('link', { name: 'Exit' }).click();
-  await page.getByRole('link', { name: 'Exit' }).click();
+  await navigation.navigateToQaRegression();
+  await qaRegressionPage.navigateToCreateDelivery();
+  
+  // Fill delivery form
+  await createDeliveryPage.fillDeliveryForm({
+    orgCode: deliveryData.orgCode,
+    recipient: deliveryData.recipient,
+    location: deliveryData.location,
+    notes: deliveryData.notes,
+    pieces: deliveryData.pieces
+  });
+  
+  // Navigate to printer selection and complete
+  await createDeliveryPage.navigateToPrinterList();
+  await printerSelectionPage.selectPrinter(deliveryData.printer);
+  
+  // Exit
+  await printerSelectionPage.exit();
+  await printerSelectionPage.exit(); // Second exit click from your original test
 });
